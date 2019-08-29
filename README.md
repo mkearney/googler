@@ -7,7 +7,7 @@
 
 <!-- badges: end -->
 
-This is a wrapper around the [googler command line
+This is a wrapper around the [‘googler’ command line
 tool](https://github.com/jarun/googler).
 
 ## Requirements
@@ -24,7 +24,7 @@ You can install the development version of {googler} from
 [Github](https://github.com/mkearney/googler) with:
 
 ``` r
-remotes::install_github("googler")
+remotes::install_github("mkearney/googler")
 ```
 
 <!-- You can install the released version of googler from [CRAN](https://CRAN.R-project.org) with: -->
@@ -35,7 +35,7 @@ remotes::install_github("googler")
 
 <!-- ``` -->
 
-## Search examples
+## Examples
 
 Search google with various options to specify things like the desired
 result **`count`**, google **`news`**, within a range of **`time`**,
