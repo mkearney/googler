@@ -1,0 +1,45 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# googler
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of googler is to ...
+
+## Installation
+
+You can install the released version of googler from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("googler")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+## load googler
+library(googler)
+
+## search google for "rstats" in past month
+googler("rstats", time = "m1")
+
+## search google news for rstats
+googler("rstats", news = TRUE)
+```
+

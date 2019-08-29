@@ -1,0 +1,17 @@
+Package: googler
+Title: googler: Google from the R Console
+Version: 0.0.1
+Authors@R: 
+    person(given = "Michael W.",
+           family = "Kearney",
+           role = c("aut", "cre"),
+           email = "kearneymw@missouri.edu",
+           comment = c(ORCID = "0000-0002-0730-4694"))
+Description: This is a wrapper for the command line tool 'googler'.
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    jsonlite,
+    tibble
+License: MIT + file LICENSE
+RoxygenNote: 6.1.1
