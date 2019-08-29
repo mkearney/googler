@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 options(width = 90)
+library(googler)
 ```
 
 # googler
@@ -48,17 +49,24 @@ remotes::install_github("mkearney/googler")
 
 Search google with various options to specify things like the desired result **`count`**, google **`news`**, within a range of **`time`**, from a given **`site`**, etc.
 
-```{r example}
-## load googler
-library(googler)
+### Example #1: Google "#rstats"
 
+```{r}
 ## search google for 'rstats'
-googler("rstats")
+search_google("rstats")
+```
 
+### Example #2: Google (up to 100 hits) in past year for "#rstats"
+
+```{r}
 ## search google for 100 'rstats' hits in past year
-googler("rstats", count = 100, time = "y1")
+search_google("rstats", count = 100, time = "y1")
+```
 
+### Example #3: Search google NEWS for rstats/R language articles in the past 3 weeks
+
+```{r}
 ## search google news for rstats/R language articles in the past three weeks
-googler("rstats OR \"R language\"", news = TRUE, time = "w3", exact = TRUE)
+search_google_news("rstats OR \"R language\"", time = "w3", exact = TRUE)
 ```
 
