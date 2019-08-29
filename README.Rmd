@@ -18,28 +18,46 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of googler is to ...
+This is a wrapper around the [googler command line tool](https://github.com/jarun/googler).
+
+## Requirements
+
+Python3 must be installed and located with the following code:
+
+```{r, eval=FALSE}
+Sys.which("python3")
+```
+
 
 ## Installation
 
-You can install the released version of googler from [CRAN](https://CRAN.R-project.org) with:
+You can install the development version of {googler} from [Github](https://github.com/mkearney/googler) with:
 
 ``` r
-install.packages("googler")
+remotes::install_github("googler")
 ```
 
-## Example
+<!-- You can install the released version of googler from [CRAN](https://CRAN.R-project.org) with: -->
 
-This is a basic example which shows you how to solve a common problem:
+<!-- ``` r -->
+<!-- install.packages("googler") -->
+<!-- ``` -->
+
+## Search examples
+
+Search google with various options to specify things like the desired result **`count`**, google **`news`**, within a range of **`time`**, from a given **`site`**, etc.
 
 ```{r example}
 ## load googler
 library(googler)
 
-## search google for "rstats" in past month
-googler("rstats", time = "m1")
+## search google for 'rstats'
+googler("rstats")
 
-## search google news for rstats
-googler("rstats", news = TRUE)
+## search google for 100 'rstats' hits in past year
+googler("rstats", count = 100, time = "y1")
+
+## search google news for rstats/R language articles in the past three weeks
+googler("rstats OR \"R language\"", news = TRUE, time = "w3", exact = TRUE)
 ```
 

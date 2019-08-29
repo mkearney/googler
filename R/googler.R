@@ -30,24 +30,12 @@ googler <- function(query = "#rstats",
                     time = NULL,
                     site = NULL,
                     unfilter = NULL) {
-  ## check if installed
-  errcode <- system2("which", "googler", stdout = FALSE, stderr = FALSE)
-
-  if (errcode > 0) {
-    warning(paste0("The 'googler' command line tool does not appear to be ",
-      "installed. Please install using instructions found at ",
-      "https://github.com/jarun/googler#installation"))
-    cmd <- Sys.which("python3")
-    if (identical(cmd, "")) {
-      stop("'googler' requires python3, which can't be found.")
+  ## if googler isn't installed then download python3 script and store path
+  if (identical(cmd <- Sys.which("googler"), "")) {
+    if (identical(cmd <- Sys.which("python3"), "")) {
+      stop("'googler' requires python3, which does not appear to be installed.")
     }
-    download.file(
-      "https://raw.githubusercontent.com/jarun/googler/v3.9/googler",
-      tmp <- tempfile()
-    )
-    query <- c(tmp, query)
-  } else {
-    cmd <- "googler"
+    query <- c(googler_path(), query)
   }
 
   ## compile args
@@ -65,7 +53,10 @@ googler <- function(query = "#rstats",
     "-C", "--json"
   )
 
+  ## execute command
   out <- system2(cmd, args = args, stdout = TRUE)
+
+  ## parse JSON and return as a tibble
   tibble::as_tibble(jsonlite::fromJSON(out))
 }
 
@@ -74,3 +65,19 @@ googler <- function(query = "#rstats",
     b
   else a
 }
+
+googler_path <- function() {
+  if (is.null(path <- getOption("googler.path"))) {
+    download.file(
+      "https://raw.githubusercontent.com/jarun/googler/v3.9/googler",
+      path <- file.path(tempdir(), "googler"),
+      quiet = TRUE
+    )
+    options(googler.path = path)
+  }
+  path
+}
+
+# warning(paste0("The 'googler' command line tool does not appear to be ",
+#   "installed. Please install using instructions found at ",
+#   "https://github.com/jarun/googler#installation"))
