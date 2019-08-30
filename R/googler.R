@@ -33,10 +33,9 @@ googler <- function(query = "",
                     unfilter = NULL) {
   ## parse JSON and return as a tibble
   tibble::as_tibble(jsonlite::fromJSON(
-    googler_(query, start, count, news, tld, lang, exact, time, site, unfilter)
+    do.call("googler_", as.list(environment()))
   ))
 }
-
 
 #' googler_
 #'
