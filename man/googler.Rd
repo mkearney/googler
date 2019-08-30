@@ -4,11 +4,13 @@
 \alias{googler}
 \title{googler}
 \usage{
-googler(query, start = NULL, count = NULL, news = NULL, tld = NULL,
-  lang = NULL, exact = NULL, time = NULL, site = NULL,
-  unfilter = NULL)
+googler(query = "", start = NULL, count = NULL, news = NULL,
+  tld = NULL, lang = NULL, exact = NULL, time = NULL,
+  site = NULL, unfilter = NULL)
 }
 \arguments{
+\item{query}{Search query.}
+
 \item{start}{Start at the Nth result.}
 
 \item{count}{Show N results–defaults to 10}

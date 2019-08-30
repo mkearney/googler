@@ -2,6 +2,7 @@
 #'
 #' googler(): Search Google from the R console
 #'
+#' @param query Search query.
 #' @param start Start at the Nth result.
 #' @param count Show N results–defaults to 10
 #' @param news Show results from news section.
@@ -20,7 +21,7 @@
 #' googler_news("rstats")
 #' }
 #' @export
-googler <- function(query,
+googler <- function(query = "",
                     start = NULL,
                     count = NULL,
                     news = NULL,

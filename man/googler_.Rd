@@ -9,6 +9,8 @@ googler_(query, start = NULL, count = NULL, news = NULL,
   site = NULL, unfilter = NULL)
 }
 \arguments{
+\item{query}{Search query.}
+
 \item{start}{Start at the Nth result.}
 
 \item{count}{Show N results–defaults to 10}
