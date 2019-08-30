@@ -15,9 +15,11 @@ options(width = 90)
 library(googler)
 ```
 
-# googler
-
+# googler <img src='man/figures/logo.png' align="right" height="277.5" />
 <!-- badges: start -->
+[![Travis build status](https://travis-ci.org/mkearney/googler.svg?branch=master)](https://travis-ci.org/mkearney/googler)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/mkearney/googler?branch=master&svg=true)](https://ci.appveyor.com/project/mkearney/googler)
 <!-- badges: end -->
 
 This is a wrapper around the ['googler' command line tool](https://github.com/jarun/googler).

@@ -1,10 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# googler
+# googler <img src='man/figures/logo.png' align="right" height="277.5" />
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/mkearney/googler.svg?branch=master)](https://travis-ci.org/mkearney/googler)
 <!-- badges: end -->
 
 This is a wrapper around the [‘googler’ command line
@@ -21,7 +23,8 @@ Sys.which("python3")
 ## Installation
 
 You can install the development version of {googler} from
-[Github](https://github.com/mkearney/googler) with:
+[Github](https://github.com/mkearney/googler)
+with:
 
 ``` r
 remotes::install_github("mkearney/googler")
@@ -56,9 +59,9 @@ googler("rstats")
 #>  5 I'm working with the European … <NULL>     rstats - Reddit  https://www.reddit.com/r/r…
 #>  6 This function is used to calcu… <NULL>     rstats function… https://www.rdocumentation…
 #>  7 GitHub is where people build s… <NULL>     Topic: rstats ·… https://github.com/topics/…
-#>  8 Today I pushed a preliminary v… <NULL>     Rstats - Once U… https://www.onceupondata.c…
-#>  9 Read writing about Rstats in l… <df[,2] [… Rstats – learn … https://blog.exploratory.i…
-#> 10 Jul 24, 2019 ... Welcome to RS… <df[,2] [… RStats Institut… https://www.missouristate.…
+#>  8 Read writing about Rstats in l… <df[,2] [… Rstats – learn … https://blog.exploratory.i…
+#>  9 Jul 24, 2019 ... Welcome to RS… <df[,2] [… RStats Institut… https://www.missouristate.…
+#> 10 Today I pushed a preliminary v… <NULL>     Rstats - Once U… https://www.onceupondata.c…
 
 ## search google for 100 'rstats' or "R language" hits in past year
 googler("rstats OR \"R language\"", count = 100, time = "y1")
@@ -66,14 +69,14 @@ googler("rstats OR \"R language\"", count = 100, time = "y1")
 #>    abstract                   matches   title               url                   metadata
 #>    <chr>                      <list>    <chr>               <chr>                 <chr>   
 #>  1 Looking for teaching mate… <df[,2] … #rstats hashtag on… https://twitter.com/… <NA>    
-#>  2 Excited to announce that … <NULL>    #Rstats - Twitter … https://twitter.com/… <NA>    
-#>  3 I'm working with the Euro… <NULL>    rstats - Reddit     https://www.reddit.c… <NA>    
+#>  2 I'm working with the Euro… <NULL>    rstats - Reddit     https://www.reddit.c… <NA>    
+#>  3 This past year in R has b… <NULL>    My 2018 #rstats ye… https://leonawicz.gi… <NA>    
 #>  4 Welcome to RStats Institu… <df[,2] … RStats Institute -… https://www.missouri… <NA>    
-#>  5 This past year in R has b… <NULL>    My 2018 #rstats ye… https://leonawicz.gi… <NA>    
+#>  5 RStats Glossary. Find def… <df[,2] … Stats Tools - RSta… https://www.missouri… <NA>    
 #>  6 "The view_df() function f… <NULL>    Quickly create Cod… https://www.r-blogge… <NA>    
 #>  7 Why the R Language? R is … <df[,2] … Why use the R Lang… https://www.burns-st… <NA>    
-#>  8 Using R language with Ana… <df[,2] … Using R language w… https://docs.anacond… <NA>    
-#>  9 Basically, this book is a… <df[,2] … A Complete Guide t… https://towardsdatas… <NA>    
+#>  8 Basically, this book is a… <df[,2] … A Complete Guide t… https://towardsdatas… <NA>    
+#>  9 This blog on R Programmin… <NULL>    R Programming | Be… https://www.edureka.… <NA>    
 #> 10 This trend is of course h… <df[,2] … What is R Programm… https://www.guru99.c… <NA>    
 #> # … with 87 more rows
 ```
@@ -91,7 +94,7 @@ googler("rstats OR \"R language\"", news = TRUE, time = "w3", exact = TRUE)
 #>  3 'Brittany Runs a Marat… <NULL>    The Boston Gl… Jillian Bell lac… https://www.bostong…
 #>  4 “A broad range of orga… <df[,2] … Datanami, Aug… Is Python Strang… https://www.datanam…
 #>  5 28 R (language) — Gary… <df[,2] … Valdosta Dail… Capsule reviews … https://www.valdost…
-#>  6 Cameron admits that ea… <df[,2] … Deadline, 15 … 'Terminator: Dar… https://deadline.co…
+#>  6 Cameron admits that ea… <df[,2] … Deadline, 17 … 'Terminator: Dar… https://deadline.co…
 #>  7 The final image of Dav… <NULL>    Detroit Free … David Crosby doc… https://www.freep.c…
 #>  8 THIS WEEK. AFTER THE W… <NULL>    The Florida T… Movie capsules: … https://www.jackson…
 #>  9 “Be yourself” is a loa… <NULL>    Detroit Free … Ace cast is mast… https://www.freep.c…
