@@ -112,9 +112,33 @@ check_count <- function(x) {
     a
 }
 
+
+readlines_url <- function(url, path) {
+  op <- getOption("encoding")
+  on.exit(options(encoding = op), add = TRUE)
+  options(encoding = "UTF-8")
+  con <- url(url, open = "r")
+  x <- readLines(con, warn = FALSE, encoding = "UTF-8")
+  close(con)
+  writeLines(x, path)
+  invisible()
+}
+
+googler_path_readlines <- function() {
+  if (is.null(path <- getOption("googler.path"))) {
+    readlines_url(
+      "https://raw.githubusercontent.com/jarun/googler/v3.9/googler",
+      path <- file.path(tempdir(), "googler")
+    )
+    options(googler.path = path)
+  }
+  path
+}
+
+
 googler_path <- function() {
   if (is.null(path <- getOption("googler.path"))) {
-    download.file(
+    utils::download.file(
       "https://raw.githubusercontent.com/jarun/googler/v3.9/googler",
       path <- file.path(tempdir(), "googler"),
       quiet = TRUE
