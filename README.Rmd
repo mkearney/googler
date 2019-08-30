@@ -51,20 +51,24 @@ remotes::install_github("mkearney/googler")
 
 Search google with various options to specify things like the desired result **`count`**, google **`news`**, within a range of **`time`**, from a given **`site`**, etc.
 
-### Example #1: `googler()`
+### Example #1: Basic google search
 
 ```{r}
 ## search google for 'rstats'
 googler("rstats")
-
-## search google for 100 'rstats' or "R language" hits in past year
-googler("rstats OR \"R language\"", count = 100, time = "y1")
 ```
 
-### Example #2: `googler()`
+### Example #2: Advanced google search
+
+```{r}
+## search google for 100 'rstats' or "R language" hits in English in past year
+googler("rstats OR \"R language\"", count = 100, time = "y1", lang = "en")
+```
+
+### Example #3: Search google news
 
 ```{r}
 ## search google news for rstats/R language articles in the past three weeks
-googler("rstats OR \"R language\"", news = TRUE, time = "w3", exact = TRUE)
+googler("rstats OR \"R language\"", news = TRUE)
 ```
 
