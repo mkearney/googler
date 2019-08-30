@@ -1,5 +1,5 @@
 Package: googler
-Title: googler: Google from the R Console
+Title: Google from the R Console
 Version: 0.0.1
 Authors@R: 
     person(given = "Michael W.",
