@@ -59,7 +59,7 @@ googler_ <- function(query,
 
   ## if googler isn't installed then download python3 script and store path
   if (identical(cmd <- Sys.which("googler.path"), c(googler.path = ""))) {
-    if (identical(cmd <- Sys.which("python3"), "")) {
+    if (identical(cmd <- Sys.which("python3"), c(python3 = ""))) {
       stop("'googler' requires python3, which does not appear to be installed.")
     }
     args <- googler_path()
