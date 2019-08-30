@@ -123,7 +123,3 @@ googler_path <- function() {
   }
   path
 }
-
-# warning(paste0("The 'googler' command line tool does not appear to be ",
-#   "installed. Please install using instructions found at ",
-#   "https://github.com/jarun/googler#installation"))
