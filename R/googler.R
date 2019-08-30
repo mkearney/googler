@@ -1,6 +1,6 @@
-#' search_google
+#' googler
 #'
-#' search_google(): Search Google from the R console
+#' googler(): Search Google from the R console
 #'
 #' @param start Start at the Nth result.
 #' @param count Show N results–defaults to 10
@@ -14,13 +14,13 @@
 #' @examples
 #' \dontrun{
 #' ## search google within past month
-#' search_google("rstats", time = "m1")
+#' googler("rstats", time = "m1")
 #'
 #' ## search google news
-#' search_google_news("rstats")
+#' googler_news("rstats")
 #' }
 #' @export
-search_google <- function(query,
+googler <- function(query,
                     start = NULL,
                     count = NULL,
                     news = NULL,
@@ -32,62 +32,33 @@ search_google <- function(query,
                     unfilter = NULL) {
   ## parse JSON and return as a tibble
   tibble::as_tibble(jsonlite::fromJSON(
-    search_google_(query, start, count, news, tld, lang, exact, time, site, unfilter)
-  ))
-}
-
-#' search_google_news
-#'
-#' search_google_news(): Search Google NEWS from the R console
-#'
-#' @param start Start at the Nth result.
-#' @param count Show N results–defaults to 10
-#' @param tld Country-specific search with top-level domain TLD, e.g., 'in' for India.
-#' @param lang Search for the language, e.g., 'fi' for Finnish.
-#' @param exact Disable automatic spelling correction. Search exact keywords.
-#' @param time Time limit search, e.g., 'h5' (5 hrs), 'd5' (5 days), 'w5' (5 weeks), 'm5' (5 months), 'y5' (5 years)
-#' @param site Search a site using Google.
-#' @param unfilter Do not omit similar results.
-#' @rdname search_google
-#' @export
-search_google_news <- function(query,
-                               start = NULL,
-                               count = NULL,
-                               tld = NULL,
-                               lang = NULL,
-                               exact = NULL,
-                               time = NULL,
-                               site = NULL,
-                               unfilter = NULL) {
-  ## parse JSON and return as a tibble
-  tibble::as_tibble(jsonlite::fromJSON(
-    search_google_(query, start, count, news = TRUE, tld, lang, exact, time, site, unfilter)
+    googler_(query, start, count, news, tld, lang, exact, time, site, unfilter)
   ))
 }
 
 
-#' search_google_
+#' googler_
 #'
-#' search_google_(): Internal version of search_google that returns stdout
+#' googler_(): Internal version of googler that returns stdout
 #'
-#' @inheritParams search_google
+#' @inheritParams googler
 #' @keywords internal
-search_google_ <- function(query,
-                           start = NULL,
-                           count = NULL,
-                           news = NULL,
-                           tld = NULL,
-                           lang = NULL,
-                           exact = NULL,
-                           time = NULL,
-                           site = NULL,
-                           unfilter = NULL) {
+googler_ <- function(query,
+                     start = NULL,
+                     count = NULL,
+                     news = NULL,
+                     tld = NULL,
+                     lang = NULL,
+                     exact = NULL,
+                     time = NULL,
+                     site = NULL,
+                     unfilter = NULL) {
 
   ## init args vector
   args <- character()
 
   ## if googler isn't installed then download python3 script and store path
-  if (identical(cmd <- Sys.which("googler"), "")) {
+  if (identical(cmd <- Sys.which("googler.path"), c(googler.path = ""))) {
     if (identical(cmd <- Sys.which("python3"), "")) {
       stop("'googler' requires python3, which does not appear to be installed.")
     }
@@ -99,7 +70,7 @@ search_google_ <- function(query,
 
   ## compile args
   args <- c(args,
-    query    %||%  paste0(""),
+    shQuote(query    %||%  paste0("")),
     start    %|||% paste0("--start=", start),
     count    %|||% paste0("--count=", count),
     news     %|||% paste0("--news"),
@@ -109,7 +80,7 @@ search_google_ <- function(query,
     time     %|||% paste0("--time=", time),
     site     %|||% paste0("--site=", site),
     unfilter %|||% paste0("--unfilter"),
-    "--json"
+    "-C", "--json"
   )
 
   ## execute command and return stdout
