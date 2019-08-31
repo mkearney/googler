@@ -85,7 +85,7 @@ googler_ <- function(query,
 is_unix <- function() grepl("unix", .Platform$OS.type, ignore.case = TRUE)
 
 windows_python <- function() {
-  if (!grepl("python", sys_which("python"))) {
+  if (!grepl("python", path <- sys_which("python"))) {
     stop("'googler' requires python, which does not appear to be installed.")
   }
   path
@@ -161,17 +161,17 @@ sys_which <- function(x) {
     return(Sys.which(x))
   }
   sys_win <- function(x) {
-    suppressWarnings({
-      path <- tryCatch(system(sprintf("where %s", x), intern = TRUE)[1],
-        error = function(e) NA_character_)
-    })
-    if (file.exists("NUL")) {
-      file.remove("NUL")
+    if (grepl("\\S", path <- Sys.which(x))) {
+      return(path)
     }
-    if (!is.na(path)) {
-      return(`names<-`(path, x))
+    path <- tryCatch(
+      suppressWarnings(system(sprintf("where %s", x), intern = TRUE)[1]),
+      warning = function(w) "",
+      error = function(e) "")
+    if (!grepl("\\S", path)) {
+      return(`names<-`("", x))
     }
-    Sys.which(x)
+    `names<-`(path, x)
   }
   vapply(x, sys_win, character(1))
 }
