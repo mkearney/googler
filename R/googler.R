@@ -54,16 +54,11 @@ googler_ <- function(query,
                      site = NULL,
                      unfilter = NULL) {
 
-  ## init args vector
-  args <- character()
+  ## path to python3
+  cmd <- python_path()
 
-  ## if googler isn't installed then download python3 script and store path
-  if (identical(cmd <- Sys.which("googler.path"), c(googler.path = ""))) {
-    if (identical(cmd <- Sys.which("python3"), c(python3 = ""))) {
-      stop("'googler' requires python3, which does not appear to be installed.")
-    }
-    args <- googler_path()
-  }
+  ## path to googler
+  args <- googler_path()
 
   ## issue automation warning if count > 100
   check_count(count > 100)
@@ -85,6 +80,33 @@ googler_ <- function(query,
 
   ## execute command and return stdout
   system2(cmd, args = args, stdout = TRUE)
+}
+
+is_unix <- function() grepl("unix", .Platform$OS.type, ignore.case = TRUE)
+
+windows_python <- function() {
+  if (path <- Sys.which("python") == "") {
+    stop("'googler' requires python, which does not appear to be installed.")
+  }
+  path
+}
+
+unix_python <- function() {
+  path <- Sys.which(paste0("python",
+    c("", "3", "3.6", "3.7", "3.8", "3.9", "4", "3.4", "3.5")))
+  path <- grep("python3", path, value = TRUE)[1]
+  if (is.na(path)) {
+    stop("'googler' requires python3, which does not appear to be installed.")
+  }
+  path
+}
+
+python_path <- function() {
+  if (is_unix()) {
+    unix_python()
+  } else {
+    windows_python()
+  }
 }
 
 check_count <- function(x) {
@@ -112,38 +134,23 @@ check_count <- function(x) {
     a
 }
 
-
-readlines_url <- function(url, path) {
-  op <- getOption("encoding")
-  on.exit(options(encoding = op), add = TRUE)
-  options(encoding = "UTF-8")
-  con <- url(url, open = "r")
-  x <- readLines(con, warn = FALSE, encoding = "UTF-8")
-  close(con)
-  writeLines(x, path)
-  invisible()
-}
-
-googler_path_readlines <- function() {
-  if (is.null(path <- getOption("googler.path"))) {
-    readlines_url(
-      "https://raw.githubusercontent.com/jarun/googler/v3.9/googler",
-      path <- file.path(tempdir(), "googler")
-    )
-    options(googler.path = path)
-  }
-  path
-}
-
-
 googler_path <- function() {
-  if (is.null(path <- getOption("googler.path"))) {
-    utils::download.file(
-      "https://raw.githubusercontent.com/jarun/googler/v3.9/googler",
-      path <- file.path(tempdir(), "googler"),
-      quiet = TRUE
-    )
+  ## if googler.path in options
+  if (!is.null(path <- getOption("googler.path"))) {
     options(googler.path = path)
+    return(path)
   }
+  ## if googler is installed
+  if (grepl("googler", path <- Sys.which("googler"))) {
+    options(googler.path = path)
+    return(path)
+  }
+  ## otherwise download and store script
+  utils::download.file(
+    "https://raw.githubusercontent.com/jarun/googler/v3.9/googler",
+    path <- file.path(tempdir(), "googler"),
+    quiet = TRUE
+  )
+  options(googler.path = path)
   path
 }
