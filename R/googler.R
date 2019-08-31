@@ -85,7 +85,7 @@ googler_ <- function(query,
 is_unix <- function() grepl("unix", .Platform$OS.type, ignore.case = TRUE)
 
 windows_python <- function() {
-  if (path <- Sys.which("python") == "") {
+  if (!grepl("python", Sys.which("python"))) {
     stop("'googler' requires python, which does not appear to be installed.")
   }
   path
