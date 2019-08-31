@@ -162,7 +162,7 @@ sys_which <- function(x) {
   }
   sys_win <- function(x) {
     suppressWarnings({
-      path <- tryCatch(system(sprintf("where %s 2> NUL", x), intern = TRUE)[1],
+      path <- tryCatch(system(sprintf("where %s", x), intern = TRUE)[1],
         error = function(e) NA_character_)
     })
     if (file.exists("NUL")) {
