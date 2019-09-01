@@ -1,5 +1,6 @@
 test_that("googler works", {
-  path <- googler:::python_path()
+  path <- tryCatch(googler:::python_path(),
+    error = function(e) "")
   if (!grepl("3.*python|python.*3", path, ignore.case = TRUE)) {
     expect_error(googler("hello", count = 1))
   } else {
