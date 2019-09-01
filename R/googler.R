@@ -65,7 +65,7 @@ googler_ <- function(query,
 
   ## set/reset encoding
   op <- getOption("encoding")
-  on.exit(encoding = op, add = TRUE)
+  on.exit(options(encoding = op), add = TRUE)
   options(encoding = "UTF-8")
 
   ## compile args
