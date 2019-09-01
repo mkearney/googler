@@ -93,13 +93,16 @@ windows_python <- function() {
   if (!grepl("python", path <- sys_which("python"))) {
     stop("'googler' requires python, which does not appear to be installed.")
   }
+  if (is.na(path)) {
+    stop("'googler' requires python3, which does not appear to be installed.")
+  }
   path
 }
 
 unix_python <- function() {
   path <- sys_which(paste0("python",
     c("", "3", "3.6", "3.7", "3.8", "3.9", "4", "3.4", "3.5")))
-  path <- grep("python3", path, value = TRUE)[1]
+  path <- grep("python3", path, value = TRUE, ignore.case = TRUE)[1]
   if (is.na(path)) {
     stop("'googler' requires python3, which does not appear to be installed.")
   }
