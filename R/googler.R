@@ -92,10 +92,10 @@ googler_ <- function(query,
 python_path <- function() {
   path <- sys_which(paste0("python",
     c("", "4", "3.9", "3.8", "3.7", "3.6", "3.5", "3.4", "3")))
-  if (!any(grepl("python[[:punct:] ]{0,}3", path, ignore.case = TRUE))) {
-    path <- grep("python", path, value = TRUE, ignore.case = TRUE)
+  if (!any(grepl("python[[:punct:] ]{0,}3|3[[:punct:] ]{0,}python", path, ignore.case = TRUE))) {
+    path <- grep("python", path, value = TRUE, ignore.case = TRUE)[1]
   } else {
-    path <- grep("python[[:punct:] ]{0,}3", path, value = TRUE, ignore.case = TRUE)[1]
+    path <- grep("3[[:punct:] ]{0,}python|python[[:punct:] ]{0,}3", path, value = TRUE, ignore.case = TRUE)[1]
   }
   if (is.na(path) || !nzchar(path)) {
     stop("'googler' requires python3, which does not appear to be installed.")
