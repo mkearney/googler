@@ -32,9 +32,9 @@ googler <- function(query,
                     site = NULL,
                     unfilter = NULL) {
   ## parse JSON and return as a tibble
-  tibble::as_tibble(jsonlite::fromJSON(
+  try_tbl(tibble::as_tibble(jsonlite::fromJSON(
     do.call("googler_", as.list(environment()))
-  ))
+  )))
 }
 
 #' googler_
@@ -55,7 +55,7 @@ googler_ <- function(query,
                      unfilter = NULL) {
 
   ## path to python3
-  cmd <- python_path()
+  cmd <- py_path()
 
   ## path to googler
   ggl <- googler_path()
@@ -92,10 +92,12 @@ googler_ <- function(query,
 python_path <- function() {
   path <- sys_which(paste0("python",
     c("", "4", "3.9", "3.8", "3.7", "3.6", "3.5", "3.4", "3")))
-  if (!any(grepl("python[[:punct:] ]{0,}3|3[[:punct:] ]{0,}python", path, ignore.case = TRUE))) {
+  if (!any(grepl("python[[:punct:] ]{0,}3|3[[:punct:] ]{0,}python",
+    path, ignore.case = TRUE))) {
     path <- grep("python", path, value = TRUE, ignore.case = TRUE)[1]
   } else {
-    path <- grep("3[[:punct:] ]{0,}python|python[[:punct:] ]{0,}3", path, value = TRUE, ignore.case = TRUE)[1]
+    path <- grep("3[[:punct:] ]{0,}python|python[[:punct:] ]{0,}3",
+      path, value = TRUE, ignore.case = TRUE)[1]
   }
   if (is.na(path) || !nzchar(path)) {
     stop("'googler' requires python3, which does not appear to be installed.")
@@ -116,7 +118,7 @@ sys_which <- function(names) {
   if (is_unix()) {
     which <- "/usr/bin/which"
   } else {
-    which <- "where.exe"
+    which <- "where"
   }
   for (i in seq_along(names)) {
     ans <- suppressWarnings(
@@ -168,7 +170,6 @@ check_query <- function(query) {
 googler_path <- function() {
   ## if googler.path in options
   if (!is.null(path <- getOption("googler.path"))) {
-    options(googler.path = path)
     return(path)
   }
   ## if googler is installed
@@ -176,7 +177,11 @@ googler_path <- function() {
     options(googler.path = path)
     return(path)
   }
+
   ## otherwise download and store script
+  if (file.exists(file.path(tempdir(), "googler"))) {
+    unlink(file.path(tempdir(), "googler"))
+  }
   utils::download.file(
     "https://raw.githubusercontent.com/jarun/googler/v3.9/googler",
     path <- file.path(tempdir(), "googler"),
