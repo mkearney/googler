@@ -1,10 +1,9 @@
 test_that("googler works", {
-  path <- Sys.which(paste0("python",
-    c("", "3", "3.6", "3.7", "3.8", "3.9", "4", "3.4", "3.5")))
-  if (!any(grepl("python", path))) {
-    expect_error(googler("hello"))
+  path <- googler:::python_path()
+  if (!grepl("python.{0,}3", path, ignore.case = TRUE)) {
+    expect_error(googler("hello", count = 1))
   } else {
-    x <- googler("hello")
+    x <- googler("hello", count = 20)
     expect_true(is.data.frame(x))
     expect_true(nrow(x) > 1)
     expect_true(all(c("url", "abstract") %in% names(x)))

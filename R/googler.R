@@ -21,7 +21,7 @@
 #' googler_news("rstats")
 #' }
 #' @export
-googler <- function(query = "",
+googler <- function(query,
                     start = NULL,
                     count = NULL,
                     news = NULL,
@@ -58,10 +58,13 @@ googler_ <- function(query,
   cmd <- python_path()
 
   ## path to googler
-  args <- googler_path()
+  ggl <- googler_path()
 
   ## issue automation warning if count > 100
   check_count(count > 100)
+
+  ## check query
+  check_query(query)
 
   ## set/reset encoding
   op <- getOption("encoding")
@@ -69,16 +72,15 @@ googler_ <- function(query,
   options(encoding = "UTF-8")
 
   ## compile args
-  args <- c(args,
-    shQuote(query    %||%  paste0("")),
-    start    %|||% paste0("--start=", start),
-    count    %|||% paste0("--count=", count),
+  args <- c(ggl, shQuote(query),
+    start    %|||% paste0("--start ", start),
+    count    %|||% paste0("--count ", count),
     news     %|||% paste0("--news"),
-    tld      %|||% paste0("--tld=", tld),
-    lang     %|||% paste0("--lang=", lang),
+    tld      %|||% paste0("--tld ", tld),
+    lang     %|||% paste0("--lang ", lang),
     exact    %|||% paste0("--exact"),
-    time     %|||% paste0("--time=", time),
-    site     %|||% paste0("--site=", site),
+    time     %|||% paste0("--time ", time),
+    site     %|||% paste0("--site ", site),
     unfilter %|||% paste0("--unfilter"),
     "-C", "--json"
   )
@@ -87,34 +89,54 @@ googler_ <- function(query,
   system2(cmd, args = args, stdout = TRUE)
 }
 
+python_path <- function() {
+  path <- sys_which(paste0("python",
+    c("", "4", "3.9", "3.8", "3.7", "3.6", "3.5", "3.4", "3")))
+  if (!any(grepl("python[[:punct:] ]{0,}3", path, ignore.case = TRUE))) {
+    path <- grep("python", path, value = TRUE, ignore.case = TRUE)
+  } else {
+    path <- grep("python[[:punct:] ]{0,}3", path, value = TRUE, ignore.case = TRUE)[1]
+  }
+  if (is.na(path) || !nzchar(path)) {
+    stop("'googler' requires python3, which does not appear to be installed.")
+  }
+  path
+}
+
 is_unix <- function() grepl("unix", .Platform$OS.type, ignore.case = TRUE)
 
-windows_python <- function() {
-  if (!grepl("python", path <- sys_which("python"))) {
-    stop("'googler' requires python, which does not appear to be installed.")
-  }
-  if (is.na(path)) {
-    stop("'googler' requires python3, which does not appear to be installed.")
-  }
-  path
+win_py_version <- function() {
+  system("python --version", intern = TRUE, invisible = TRUE)
 }
 
-unix_python <- function() {
-  path <- sys_which(paste0("python",
-    c("", "3", "3.6", "3.7", "3.8", "3.9", "4", "3.4", "3.5")))
-  path <- grep("python3", path, value = TRUE, ignore.case = TRUE)[1]
-  if (is.na(path)) {
-    stop("'googler' requires python3, which does not appear to be installed.")
-  }
-  path
-}
-
-python_path <- function() {
+sys_which <- function(names) {
+  names <- names[!is.na(names)]
+  res <- character(length(names))
+  names(res) <- names
   if (is_unix()) {
-    unix_python()
+    which <- "/usr/bin/which"
   } else {
-    windows_python()
+    which <- "where.exe"
   }
+  for (i in seq_along(names)) {
+    ans <- suppressWarnings(
+      tryCatch(system(paste(which, shQuote(names[i])),
+      intern = TRUE, ignore.stderr = TRUE),
+        error = function(e) ""))
+    if (grepl("solaris", R.version$os)) {
+      tmp <- strsplit(ans[1], " ", fixed = TRUE)[[1]]
+      if (identical(tmp[1:3], c("no", i, "in")))
+        ans <- ""
+    }
+    res[i] <- if (length(ans))
+      ans[1]
+    else ""
+    if (is.na(res[i]))
+      res[i] <- ""
+    if (!file.exists(res[i]))
+      res[i] <- ""
+  }
+  res
 }
 
 check_count <- function(x) {
@@ -128,11 +150,12 @@ check_count <- function(x) {
   invisible()
 }
 
-`%||%` <- function(a, b) {
-  if (is.null(a))
-    b
-  else
-    a
+check_query <- function(query) {
+  stopifnot(
+    length(query) == 1,
+    is.character(query),
+    nzchar(query)
+  )
 }
 
 `%|||%` <- function(a, b) {
@@ -161,25 +184,4 @@ googler_path <- function() {
   )
   options(googler.path = path)
   path
-}
-
-
-sys_which <- function(x) {
-  if (is_unix()) {
-    return(Sys.which(x))
-  }
-  sys_win <- function(x) {
-    if (grepl("\\S", path <- Sys.which(x))) {
-      return(path)
-    }
-    path <- tryCatch(
-      suppressWarnings(system(sprintf("where %s", x), intern = TRUE)[1]),
-      warning = function(w) "",
-      error = function(e) "")
-    if (!grepl("\\S", path)) {
-      return(`names<-`("", x))
-    }
-    `names<-`(path, x)
-  }
-  vapply(x, sys_win, character(1))
 }
