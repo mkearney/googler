@@ -63,6 +63,11 @@ googler_ <- function(query,
   ## issue automation warning if count > 100
   check_count(count > 100)
 
+  ## set/reset encoding
+  op <- getOption("encoding")
+  on.exit(encoding = op, add = TRUE)
+  options(encoding = "UTF-8")
+
   ## compile args
   args <- c(args,
     shQuote(query    %||%  paste0("")),
