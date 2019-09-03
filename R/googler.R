@@ -12,6 +12,8 @@
 #' @param time Time limit search, e.g., 'h5' (5 hrs), 'd5' (5 days), 'w5' (5 weeks), 'm5' (5 months), 'y5' (5 years)
 #' @param site Search a site using Google.
 #' @param unfilter Do not omit similar results.
+#' @return A tibble data frame where each row represents one search result. Columns contain information about the abstract, 
+#'   metadata, url, and phrase matching for each result.
 #' @examples
 #' \dontrun{
 #' ## search google within past month
